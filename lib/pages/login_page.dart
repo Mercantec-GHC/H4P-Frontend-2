@@ -10,11 +10,11 @@ import "register.page.dart";
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
 
-  final usernameController = TextEditingController();
+  final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
   void signUserIn(BuildContext context) async {
-    final String username = usernameController.text;
+    final String email = emailController.text;
     final String password = passwordController.text;
 
     final response = await http.post(
@@ -23,7 +23,7 @@ class LoginPage extends StatelessWidget {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: {
-        'username': Uri.encodeComponent(username),
+        'email': Uri.encodeComponent(email),
         'password': Uri.encodeComponent(password),
       },
     );
@@ -34,7 +34,7 @@ class LoginPage extends StatelessWidget {
       final String jwt = responseData['token'];
       print(jwt);
       await storage.write(key: 'jwt', value: jwt);
-      await storage.write(key: "username", value: username);
+      await storage.write(key: "email", value: email);
 
       Navigator.pushReplacement(
         context,
@@ -46,7 +46,7 @@ class LoginPage extends StatelessWidget {
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Invalid username or password')),
+        SnackBar(content: Text('Invalid email or password')),
       );
     }
   }
@@ -75,8 +75,8 @@ class LoginPage extends StatelessWidget {
               ),
               const SizedBox(height: 25),
               MyTextField(
-                controller: usernameController,
-                hintText: "Username",
+                controller: emailController,
+                hintText: "E-mail",
                 obscureText: false,
               ),
               const SizedBox(height: 25),
@@ -86,6 +86,7 @@ class LoginPage extends StatelessWidget {
                 obscureText: true,
               ),
               const SizedBox(height: 25),
+              /*
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: Row(
@@ -98,12 +99,14 @@ class LoginPage extends StatelessWidget {
                   ],
                 ),
               ),
+              */
               const SizedBox(height: 25),
               MyButton(
                 onTap: () => signUserIn(context),
                 text: "Sign In",
               ),
               const SizedBox(height: 50),
+              /*
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: Row(
@@ -130,6 +133,8 @@ class LoginPage extends StatelessWidget {
                   ],
                 ),
               ),
+              */
+              /*
               const SizedBox(height: 25),
               Row(
                 children: [
@@ -137,6 +142,7 @@ class LoginPage extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 25),
+              */
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

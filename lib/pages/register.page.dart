@@ -7,11 +7,11 @@ import 'package:http/http.dart' as http;
 class RegisterPage extends StatelessWidget {
   RegisterPage({super.key});
 
-  final usernameController = TextEditingController();
+  final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
   void registerUser(BuildContext context) async {
-    final String username = usernameController.text;
+    final String email = emailController.text;
     final String password = passwordController.text;
 
     final response = await http.post(
@@ -20,11 +20,10 @@ class RegisterPage extends StatelessWidget {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: {
-        'username': Uri.encodeComponent(username),
+        'email': Uri.encodeComponent(email),
         'password': Uri.encodeComponent(password),
       },
     );
-
     if (response.statusCode == 200) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Signup successful')),
@@ -61,16 +60,16 @@ class RegisterPage extends StatelessWidget {
               ),
               const SizedBox(height: 50),
               Text(
-                "Register here",
+                "Opret en bruger her, for at begynde at bruge FiskeFitness™",
                 style: TextStyle(
                   color: Color(0xFF333333),
-                  fontSize: 16,
+                  fontSize: 14,
                 ),
               ),
               const SizedBox(height: 25),
               MyTextField(
-                controller: usernameController,
-                hintText: "Username",
+                controller: emailController,
+                hintText: "E-mail",
                 obscureText: false,
               ),
               const SizedBox(height: 25),
@@ -90,7 +89,7 @@ class RegisterPage extends StatelessWidget {
                 children: [
                   Text(
                     "Already a member?",
-                    style: TextStyle(color: Colors.grey[700]),
+                    style: TextStyle(color: Color(0xff333333)),
                   ),
                   const SizedBox(width: 4),
                   GestureDetector(

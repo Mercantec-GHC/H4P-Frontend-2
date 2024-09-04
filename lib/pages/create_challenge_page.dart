@@ -2,65 +2,112 @@ import "package:flutter/material.dart";
 import "login_page.dart";
 import "package:flutter_secure_storage/flutter_secure_storage.dart";
 import "home_page.dart";
+import "../components/my_appbar.dart";
+import "../components/my_textfield.dart";
+import "../components/my_button.dart";
+import 'package:http/http.dart' as http;
 
 class CreateChallengePage extends StatelessWidget {
-  const CreateChallengePage({super.key});
+  CreateChallengePage({super.key});
 
-  void _logout(BuildContext context) async {
-    final storage = FlutterSecureStorage();
+  final challengeOwnerIdController = TextEditingController();
+  final challengeTitleController = TextEditingController();
+  final challengeDescriptionController = TextEditingController();
+  final challengeTargetDistanceController = TextEditingController();
 
-    await storage.deleteAll();
+  void createChallenge(BuildContext context) async {
+    final String ownerId = challengeOwnerIdController.text;
+    final String title = challengeTitleController.text;
+    final String description = challengeDescriptionController.text;
+    final String targetDistance = challengeTargetDistanceController.text;
 
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => LoginPage()),
+    final response = await http.post(
+      Uri.parse(
+          'https://fiskeprojekt-gruppe2.vercel.app/api/competitions/create'),
+      headers: <String, String>{
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: {
+        'ownerId': Uri.encodeComponent(ownerId),
+        'title': Uri.encodeComponent(title),
+        'description': Uri.encodeComponent(description),
+        'targetDistance': Uri.encodeComponent(targetDistance),
+      },
     );
+    if (response.statusCode == 200) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Challenge created')),
+      );
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to create challenge')),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFF6cbabc),
-      appBar: AppBar(
-        backgroundColor: Color(0xFFcacdce),
-        title: Text(
-          'Hjælp! Jeg er en fisk?',
-          style: TextStyle(
-            color: Color(0xFF333333),
-          ),
-        ),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Color(0xFF333333)),
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => HomePage()),
-            );
-          },
-        ),
-        actions: [
-          PopupMenuButton<String>(
-            onSelected: (value) {
-              if (value == 'logout') {
-                _logout(context);
-              }
-            },
-            itemBuilder: (BuildContext context) {
-              return [
-                PopupMenuItem<String>(
-                  value: 'logout',
-                  child: Row(
-                    children: const [
-                      Icon(Icons.logout),
-                      SizedBox(width: 8),
-                      Text('Logout'),
-                    ],
-                  ),
+      appBar: CustomAppBar(title: 'Create Challenge Page'),
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10.0),
+                child: Image.asset(
+                  'lib/images/fiske_logo.png',
+                  width: 150,
+                  height: 150,
+                  fit: BoxFit.cover,
                 ),
-              ];
-            },
+              ),
+              const SizedBox(height: 50),
+              Text(
+                "Opret Challenge",
+                style: TextStyle(
+                  color: Color(0xFF333333),
+                  fontSize: 14,
+                ),
+              ),
+              const SizedBox(height: 25),
+              MyTextField(
+                controller: challengeOwnerIdController,
+                hintText: "OwnerId",
+                obscureText: false,
+              ),
+              const SizedBox(height: 25),
+              MyTextField(
+                controller: challengeTitleController,
+                hintText: "Title",
+                obscureText: false,
+              ),
+              const SizedBox(height: 25),
+              MyTextField(
+                controller: challengeDescriptionController,
+                hintText: "Description",
+                obscureText: false,
+              ),
+              const SizedBox(height: 25),
+              MyTextField(
+                controller: challengeTargetDistanceController,
+                hintText: "Distance",
+                obscureText: false,
+              ),
+              const SizedBox(height: 25),
+              MyButton(
+                onTap: () => createChallenge(context),
+                text: "Create Challenge",
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
