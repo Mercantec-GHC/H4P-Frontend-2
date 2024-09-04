@@ -8,13 +8,11 @@ import 'package:http/http.dart' as http;
 class CreateChallengePage extends StatelessWidget {
   CreateChallengePage({super.key});
 
-  final challengeOwnerIdController = TextEditingController();
   final challengeTitleController = TextEditingController();
   final challengeDescriptionController = TextEditingController();
   final challengeTargetDistanceController = TextEditingController();
 
   void createChallenge(BuildContext context) async {
-    final String ownerId = challengeOwnerIdController.text;
     final String title = challengeTitleController.text;
     final String description = challengeDescriptionController.text;
     final String targetDistance = challengeTargetDistanceController.text;
@@ -26,7 +24,6 @@ class CreateChallengePage extends StatelessWidget {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: {
-        'ownerId': Uri.encodeComponent(ownerId),
         'title': Uri.encodeComponent(title),
         'description': Uri.encodeComponent(description),
         'targetDistance': Uri.encodeComponent(targetDistance),
@@ -75,11 +72,6 @@ class CreateChallengePage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 25),
-              MyTextField(
-                controller: challengeOwnerIdController,
-                hintText: "OwnerId",
-                obscureText: false,
-              ),
               const SizedBox(height: 25),
               MyTextField(
                 controller: challengeTitleController,

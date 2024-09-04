@@ -10,6 +10,14 @@ class Challenge {
     required this.description,
     required this.targetDistance,
   });
+
+  factory Challenge.fromJson(Map<String, dynamic> json) {
+    return Challenge(
+      title: json['title'],
+      description: json['description'],
+      targetDistance: (json['targetDistance'] as num).toDouble(),
+    );
+  }
 }
 
 class ChallengeBox extends StatelessWidget {

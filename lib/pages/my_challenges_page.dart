@@ -1,9 +1,27 @@
 import "package:flutter/material.dart";
 import "../components/my_appbar.dart";
 import "../components/my_challenge_box.dart";
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class ChallengePage extends StatelessWidget {
   const ChallengePage({super.key});
+
+  Future<List<Challenge>> fetchChallenges() async {
+    final response = await http.get(
+        Uri.parse('https://fiskeprojekt-gruppe2.vercel.app/api/competitions'));
+
+    if (response.statusCode == 200) {
+      // Decode the JSON response
+      Map<String, dynamic> data = json.decode(response.body);
+
+      List<dynamic> challengesJson = data['data'];
+
+      return challengesJson.map((item) => Challenge.fromJson(item)).toList();
+    } else {
+      throw Exception('Failed to load challenges');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,29 +52,20 @@ class ChallengePage extends StatelessWidget {
               ),
             ),
           ),
-
-          // Use Expanded to allow the ChallengeList to take up the remaining space
           Expanded(
-            child: ChallengeList(
-              challenges: [
-                Challenge(
-                  title: 'Marathon',
-                  description: 'Run a full marathon within a month.',
-                  targetDistance: 42.195,
-                ),
-                Challenge(
-                  title: 'Half-Marathon',
-                  description: 'Complete a half-marathon in 2 weeks.',
-                  targetDistance: 21.0975,
-                ),
-                Challenge(
-                  title: '400m',
-                  description: 'Run 400m fastest time wins.',
-                  targetDistance: 400,
-                ),
-
-                // Add more challenges here
-              ],
+            child: FutureBuilder<List<Challenge>>(
+              future: fetchChallenges(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else if (snapshot.hasData) {
+                  return ChallengeList(challenges: snapshot.data!);
+                } else {
+                  return Center(child: Text('No challenges available.'));
+                }
+              },
             ),
           ),
         ],
