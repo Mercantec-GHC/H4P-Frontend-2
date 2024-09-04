@@ -1,6 +1,4 @@
 import "package:flutter/material.dart";
-import "login_page.dart";
-import "package:flutter_secure_storage/flutter_secure_storage.dart";
 import "home_page.dart";
 import "../components/my_appbar.dart";
 import "../components/my_textfield.dart";
