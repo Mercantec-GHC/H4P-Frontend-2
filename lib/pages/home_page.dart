@@ -45,7 +45,7 @@ class HomePage extends StatelessWidget {
                   fit: BoxFit.cover,
                 ),
               ),
-              SizedBox(height: 100),
+              SizedBox(height: 300),
               MyButton(
                 onTap: () => {
                   Navigator.pushReplacement(
@@ -66,7 +66,6 @@ class HomePage extends StatelessWidget {
                 },
                 text: "My Challenges",
               ),
-              SizedBox(height: 20),
             ],
           )),
           Positioned(

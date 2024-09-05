@@ -4,6 +4,7 @@ import "../components/my_appbar.dart";
 import "../components/my_textfield.dart";
 import "../components/my_button.dart";
 import 'package:http/http.dart' as http;
+import "package:flutter_secure_storage/flutter_secure_storage.dart";
 
 class CreateChallengePage extends StatelessWidget {
   CreateChallengePage({super.key});
@@ -12,16 +13,21 @@ class CreateChallengePage extends StatelessWidget {
   final challengeDescriptionController = TextEditingController();
   final challengeTargetDistanceController = TextEditingController();
 
+  final storage = const FlutterSecureStorage();
+
   void createChallenge(BuildContext context) async {
     final String title = challengeTitleController.text;
     final String description = challengeDescriptionController.text;
     final String targetDistance = challengeTargetDistanceController.text;
+
+    final String? jwtToken = await storage.read(key: 'jwt');
 
     final response = await http.post(
       Uri.parse(
           'https://fiskeprojekt-gruppe2.vercel.app/api/competitions/create'),
       headers: <String, String>{
         'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': 'Bearer $jwtToken',
       },
       body: {
         'title': Uri.encodeComponent(title),

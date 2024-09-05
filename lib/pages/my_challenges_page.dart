@@ -3,16 +3,23 @@ import "../components/my_appbar.dart";
 import "../components/my_challenge_box.dart";
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class ChallengePage extends StatelessWidget {
   const ChallengePage({super.key});
 
   Future<List<Challenge>> fetchChallenges() async {
+    final storage = const FlutterSecureStorage();
+
+    final String? jwtToken = await storage.read(key: 'jwt');
     final response = await http.get(
-        Uri.parse('https://fiskeprojekt-gruppe2.vercel.app/api/competitions'));
+      Uri.parse('https://fiskeprojekt-gruppe2.vercel.app/api/competitions'),
+      headers: {
+        'Authorization': 'Bearer $jwtToken',
+      },
+    );
 
     if (response.statusCode == 200) {
-      // Decode the JSON response
       Map<String, dynamic> data = json.decode(response.body);
 
       List<dynamic> challengesJson = data['data'];

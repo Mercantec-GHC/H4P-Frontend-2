@@ -28,6 +28,7 @@ class ChallengeBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: Color(0xFFcacdce),
       margin: EdgeInsets.all(10.0),
       elevation: 5.0,
       child: Padding(
@@ -56,7 +57,7 @@ class ChallengeBox extends StatelessWidget {
               'Target Distance: ${challenge.targetDistance} km',
               style: TextStyle(
                 fontSize: 16.0,
-                color: Color(0xFFfaa53b),
+                color: Color(0xff333333),
               ),
             ),
           ],
