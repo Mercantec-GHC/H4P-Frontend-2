@@ -6,11 +6,13 @@ class Challenge {
   final String title;
   final String description;
   final double targetDistance;
+  final int id;
 
   Challenge({
     required this.title,
     required this.description,
     required this.targetDistance,
+    required this.id,
   });
 
   factory Challenge.fromJson(Map<String, dynamic> json) {
@@ -18,6 +20,7 @@ class Challenge {
       title: json['title'],
       description: json['description'],
       targetDistance: (json['targetDistance'] as num).toDouble(),
+      id: json['id'],
     );
   }
 }
@@ -63,6 +66,13 @@ class ChallengeBox extends StatelessWidget {
               ),
             ),
             SizedBox(height: 10.0),
+            Text(
+              'Challenge ID: ${challenge.id}', // Display challengeId
+              style: TextStyle(
+                fontSize: 16.0,
+                color: Color(0xff333333),
+              ),
+            ),
             MyButton(
               onTap: () {
                 Navigator.push(
