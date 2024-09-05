@@ -35,7 +35,7 @@ class ChallengePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFF6cbabc),
       appBar: CustomAppBar(
-        title: 'Hjælp! Jeg er en fisk!',
+        title: 'My Challenges Page',
       ),
       body: Column(
         children: [
@@ -51,7 +51,7 @@ class ChallengePage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Text(
-              'Welcome to the Challenge Page!',
+              'All your active challenges!',
               style: TextStyle(
                 fontSize: 24.0,
                 fontWeight: FontWeight.bold,

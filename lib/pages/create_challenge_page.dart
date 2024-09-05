@@ -30,9 +30,9 @@ class CreateChallengePage extends StatelessWidget {
         'Authorization': 'Bearer $jwtToken',
       },
       body: {
-        'title': Uri.encodeComponent(title),
-        'description': Uri.encodeComponent(description),
-        'targetDistance': Uri.encodeComponent(targetDistance),
+        'title': title,
+        'description': description,
+        'targetDistance': targetDistance,
       },
     );
     if (response.statusCode == 200) {

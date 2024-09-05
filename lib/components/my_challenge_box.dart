@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import "../pages/invite_user_page.dart";
+import "../components/my_button.dart";
 
 class Challenge {
   final String title;
@@ -59,6 +61,18 @@ class ChallengeBox extends StatelessWidget {
                 fontSize: 16.0,
                 color: Color(0xff333333),
               ),
+            ),
+            SizedBox(height: 10.0),
+            MyButton(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => InviteUsersPage(challenge: challenge),
+                  ),
+                );
+              },
+              text: "Invite User",
             ),
           ],
         ),
