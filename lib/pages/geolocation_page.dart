@@ -2,120 +2,112 @@ import "package:flutter/material.dart";
 import "../components/my_appbar.dart";
 import 'package:geolocator/geolocator.dart';
 
-class GeolocationPage extends StatefulWidget {
-  const GeolocationPage({super.key});
-
+class LocationPage extends StatefulWidget {
   @override
-  State<GeolocationPage> createState() => _GeolocationPageState();
+  _LocationPageState createState() => _LocationPageState();
 }
 
-class _GeolocationPageState extends State<GeolocationPage> {
-  Position? _currentLocation;
-  late bool servicePermission = false;
-  late LocationPermission permission;
-  Future<Position> _getCurrentLocation() async {
-    servicePermission = await Geolocator.isLocationServiceEnabled();
+class _LocationPageState extends State<LocationPage> {
+  String _location = 'Unknown';
 
-    if (!servicePermission) {
-      print("Service Disabled");
+  Future<void> _updateLocation() async {
+    try {
+      Position position = await _getCurrentLocation();
+      setState(() {
+        _location = 'Lat: ${position.latitude}, Long: ${position.longitude}';
+      });
+    } catch (e) {
+      setState(() {
+        _location = 'Error: ${e.toString()}';
+      });
+    }
+  }
+
+  Future<bool> _handleLocationPermission() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return false;
     }
 
     permission = await Geolocator.checkPermission();
-
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return false;
+      }
     }
 
-    return await Geolocator.getCurrentPosition();
+    if (permission == LocationPermission.deniedForever) {
+      return false;
+    }
+
+    return true;
+  }
+
+  Future<Position> _getCurrentLocation() async {
+    bool hasPermission = await _handleLocationPermission();
+    if (!hasPermission) return Future.error('Location permission not granted');
+
+    return await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF6cbabc),
-      appBar: CustomAppBar(
-        title: 'Get your location',
-        isHomePage: false,
+      appBar: AppBar(
+        title: Text('Geolocator Example'),
       ),
       body: Center(
-          child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            "Location Coordinates",
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Current Location: $_location'),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _updateLocation,
+              child: Text('Get Location'),
             ),
-          ),
-          SizedBox(
-            height: 6,
-          ),
-          Text(
-
-// "${_currentLocation}"
-
-              "Latitude = ${_currentLocation?.latitude} ; Longitude = ${_currentLocation?.longitude}"),
-          SizedBox(
-            height: 30.0,
-          ),
-          ElevatedButton(
-              onPressed: () async {
-                _currentLocation = await _getCurrentLocation();
-
-                /// Determine the current position of the device.
-
-                ///
-
-                /// When the location services are not enabled or permissions
-
-                /// are denied the `Future` will return an error.
-              },
-              child: Text('get location'))
-        ],
-      )),
+          ],
+        ),
+      ),
     );
   }
 }
 
-/// Determine the current position of the device.
-///
-/// When the location services are not enabled or permissions
-/// are denied the `Future` will return an error.
-Future<Position> _determinePosition() async {
+Future<bool> _handleLocationPermission() async {
   bool serviceEnabled;
   LocationPermission permission;
 
-  // Test if location services are enabled.
+  // Check if location services are enabled
   serviceEnabled = await Geolocator.isLocationServiceEnabled();
   if (!serviceEnabled) {
-    // Location services are not enabled don't continue
-    // accessing the position and request users of the
-    // App to enable the location services.
-    return Future.error('Location services are disabled.');
+    return false;
   }
 
+  // Check permission status
   permission = await Geolocator.checkPermission();
   if (permission == LocationPermission.denied) {
     permission = await Geolocator.requestPermission();
     if (permission == LocationPermission.denied) {
-      // Permissions are denied, next time you could try
-      // requesting permissions again (this is also where
-      // Android's shouldShowRequestPermissionRationale
-      // returned true. According to Android guidelines
-      // your App should show an explanatory UI now.
-      return Future.error('Location permissions are denied');
+      return false;
     }
   }
 
   if (permission == LocationPermission.deniedForever) {
-    // Permissions are denied forever, handle appropriately.
-    return Future.error(
-        'Location permissions are permanently denied, we cannot request permissions.');
+    return false;
   }
 
-  // When we reach here, permissions are granted and we can
-  // continue accessing the position of the device.
+  return true;
+}
+
+Future<Position> _getCurrentLocation() async {
+  bool hasPermission = await _handleLocationPermission();
+  if (!hasPermission) return Future.error('Location permission not granted');
+
   return await Geolocator.getCurrentPosition();
 }

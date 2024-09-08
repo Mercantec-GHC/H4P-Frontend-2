@@ -73,7 +73,7 @@ class HomePage extends StatelessWidget {
                 onTap: () => {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => GeolocationPage()),
+                    MaterialPageRoute(builder: (context) => LocationPage()),
                   ),
                 },
                 text: "Geolocator",
