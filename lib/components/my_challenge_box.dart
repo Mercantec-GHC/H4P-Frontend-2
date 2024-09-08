@@ -73,6 +73,11 @@ class ChallengeBox extends StatelessWidget {
                 color: Color(0xff333333),
               ),
             ),
+            SizedBox(height: 55.0),
+            Divider(
+              color: Color(0xFFfaa53b),
+              thickness: 2.0,
+            ),
             MyButton(
               onTap: () {
                 Navigator.push(

@@ -1,4 +1,6 @@
+import "package:fiske_fitness_app/pages/choose_username_page.dart";
 import "package:fiske_fitness_app/pages/create_challenge_page.dart";
+import "package:fiske_fitness_app/pages/geolocation_page.dart";
 import "package:flutter/material.dart";
 import "package:flutter_secure_storage/flutter_secure_storage.dart";
 import "../components/my_button.dart";
@@ -59,12 +61,22 @@ class HomePage extends StatelessWidget {
               SizedBox(height: 20),
               MyButton(
                 onTap: () => {
-                  Navigator.pushReplacement(
+                  Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => ChallengePage()),
                   ),
                 },
                 text: "My Challenges",
+              ),
+              SizedBox(height: 20),
+              MyButton(
+                onTap: () => {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => GeolocationPage()),
+                  ),
+                },
+                text: "Geolocator",
               ),
             ],
           )),
