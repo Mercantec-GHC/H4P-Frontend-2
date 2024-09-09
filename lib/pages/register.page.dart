@@ -9,10 +9,12 @@ class RegisterPage extends StatelessWidget {
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final usernameController = TextEditingController();
 
   void registerUser(BuildContext context) async {
     final String email = emailController.text;
     final String password = passwordController.text;
+    final String username = usernameController.text;
 
     final response = await http.post(
       Uri.parse('https://fiskeprojekt-gruppe2.vercel.app/api/users/create'),
@@ -20,8 +22,9 @@ class RegisterPage extends StatelessWidget {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: {
-        'email': Uri.encodeComponent(email),
-        'password': Uri.encodeComponent(password),
+        'email': email,
+        'password': password,
+        'username': username,
       },
     );
     if (response.statusCode == 200) {
@@ -70,6 +73,12 @@ class RegisterPage extends StatelessWidget {
               MyTextField(
                 controller: emailController,
                 hintText: "E-mail",
+                obscureText: false,
+              ),
+              const SizedBox(height: 25),
+              MyTextField(
+                controller: usernameController,
+                hintText: "Username",
                 obscureText: false,
               ),
               const SizedBox(height: 25),
