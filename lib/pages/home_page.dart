@@ -1,4 +1,3 @@
-import "package:fiske_fitness_app/pages/choose_username_page.dart";
 import "package:fiske_fitness_app/pages/create_challenge_page.dart";
 import "package:fiske_fitness_app/pages/geolocation_page.dart";
 import "package:flutter/material.dart";
