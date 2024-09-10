@@ -1,5 +1,6 @@
 import "package:fiske_fitness_app/pages/create_challenge_page.dart";
 import "package:fiske_fitness_app/pages/geolocation_page.dart";
+import "package:fiske_fitness_app/pages/pending_invites_page.dart";
 import "package:flutter/material.dart";
 import "package:flutter_secure_storage/flutter_secure_storage.dart";
 import "../components/my_button.dart";
@@ -46,7 +47,7 @@ class HomePage extends StatelessWidget {
                   fit: BoxFit.cover,
                 ),
               ),
-              SizedBox(height: 300),
+              SizedBox(height: 200),
               MyButton(
                 onTap: () => {
                   Navigator.pushReplacement(
@@ -76,6 +77,17 @@ class HomePage extends StatelessWidget {
                   ),
                 },
                 text: "Geolocator",
+              ),
+              SizedBox(height: 20),
+              MyButton(
+                onTap: () => {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => PendingInvitesPage()),
+                  ),
+                },
+                text: "Pending Invites",
               ),
             ],
           )),

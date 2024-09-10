@@ -1,3 +1,4 @@
+import 'package:fiske_fitness_app/components/my_button.dart';
 import 'package:fiske_fitness_app/pages/home_page.dart';
 import "package:flutter/material.dart";
 import 'package:geolocator/geolocator.dart';
@@ -184,15 +185,15 @@ class _LocationPageState extends State<LocationPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     if (!_hasStartedTracking) // Show only if tracking hasn't started
-                      ElevatedButton(
-                        onPressed: _startTracking,
-                        child: Text('Start Tracking'),
+                      MyButton(
+                        onTap: _startTracking,
+                        text: 'Start Tracking',
                       ),
                     if (_hasStartedTracking) // Show only if tracking has started
                       ...[
-                      ElevatedButton(
-                        onPressed: _isTracking ? _stopTracking : null,
-                        child: Text('Stop Tracking'),
+                      MyButton(
+                        onTap: _isTracking ? _stopTracking : null,
+                        text: 'Stop Tracking',
                       ),
                     ],
                   ],
