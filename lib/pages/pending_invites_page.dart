@@ -62,17 +62,15 @@ class _PendingInvitesPageState extends State<PendingInvitesPage> {
     );
 
     if (response.statusCode == 200) {
-      // Update invite status locally
       setState(() {
         invites = invites.map((invite) {
           if (invite['competitionId'] == competitionId) {
-            invite['status'] = true; // Mark as accepted
+            invite['status'] = true;
           }
           return invite;
         }).toList();
       });
     } else {
-      // Handle error
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to accept')),
       );
@@ -83,11 +81,14 @@ class _PendingInvitesPageState extends State<PendingInvitesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF6cbabc),
-      appBar: AppBar(title: const Text('Pending Invites')),
+      appBar: AppBar(
+        title: const Text('Pending Invites'),
+        backgroundColor: const Color(0xFFcacdce),
+      ),
       body: InviteList(
         invites: invites,
         isLoading: isLoading,
-        onAcceptInvite: acceptInvite, // Pass the acceptInvite function
+        onAcceptInvite: acceptInvite,
       ),
     );
   }

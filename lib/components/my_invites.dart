@@ -27,11 +27,10 @@ class InviteList extends StatelessWidget {
               invite['status']; // Assuming status represents acceptance
 
           return ListTile(
-            title: Text(invite['username']), // Display username
-            subtitle: Text(
-                'Competition ID: ${invite['competitionId']}'), // Display competitionId
+            title: Text(invite['ownerName']),
+            subtitle: Text('Competition Title: ${invite['competitionTitle']}'),
             trailing: isAccepted
-                ? const Text('Accepted') // If already accepted
+                ? const Text('Accepted')
                 : ElevatedButton(
                     onPressed: () {
                       onAcceptInvite(invite['competitionId'].toString());

@@ -106,43 +106,6 @@ class LoginPage extends StatelessWidget {
                 text: "Sign In",
               ),
               const SizedBox(height: 50),
-              /*
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Divider(
-                        thickness: 0.5,
-                        color: Colors.grey[400],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: Text(
-                        "Or continue with",
-                        style: TextStyle(color: Colors.grey[700]),
-                      ),
-                    ),
-                    Expanded(
-                      child: Divider(
-                        thickness: 0.5,
-                        color: Colors.grey[400],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              */
-              /*
-              const SizedBox(height: 25),
-              Row(
-                children: [
-                  //Google/Apple Login
-                ],
-              ),
-              const SizedBox(height: 25),
-              */
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -175,13 +138,3 @@ class LoginPage extends StatelessWidget {
     );
   }
 }
-
-
-
-/*
-const Text(
-                    "Register now",
-                    style: TextStyle(
-                        color: Colors.blue, fontWeight: FontWeight.bold),
-                  ),
-                  */
