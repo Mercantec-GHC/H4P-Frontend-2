@@ -36,7 +36,13 @@ class _ChallengePageState extends State<ChallengePage> {
       final data = json.decode(response.body) as Map<String, dynamic>;
       final List<dynamic> challengesJson = data['data'];
 
-      return challengesJson.map((item) => Challenge.fromJson(item)).toList();
+      List<Challenge> challenges =
+          challengesJson.map((item) => Challenge.fromJson(item)).toList();
+
+      // Example sorting by id
+      challenges.sort((a, b) => a.id.compareTo(b.id));
+
+      return challenges;
     } else {
       throw Exception('Failed to load challenges');
     }

@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 class InviteList extends StatelessWidget {
   final List invites;
   final bool isLoading;
-  final Function(String competitionId) onAcceptInvite;
+  final Function(int invitationId) onAcceptInvite;
 
   const InviteList({
     required this.invites,
     required this.isLoading,
-    required this.onAcceptInvite, // Callback for accepting invites
+    required this.onAcceptInvite,
     Key? key,
   }) : super(key: key);
 
@@ -23,17 +23,22 @@ class InviteList extends StatelessWidget {
         itemCount: invites.length,
         itemBuilder: (context, index) {
           final invite = invites[index];
-          final bool isAccepted =
-              invite['status']; // Assuming status represents acceptance
+          final bool isAccepted = invite['status'];
 
           return ListTile(
-            title: Text(invite['ownerName']),
-            subtitle: Text('Competition Title: ${invite['competitionTitle']}'),
+            title: Text("Invited by: " + invite['ownerName']),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Competition Title: ${invite['competitionTitle']}'),
+                Text('Invitation ID: ${invite['id']}'),
+              ],
+            ),
             trailing: isAccepted
                 ? const Text('Accepted')
                 : ElevatedButton(
                     onPressed: () {
-                      onAcceptInvite(invite['competitionId'].toString());
+                      onAcceptInvite(invite['id']);
                     },
                     child: const Text('Accept'),
                   ),

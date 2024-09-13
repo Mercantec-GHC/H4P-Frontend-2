@@ -46,7 +46,7 @@ class _PendingInvitesPageState extends State<PendingInvitesPage> {
     }
   }
 
-  Future<void> acceptInvite(String competitionId) async {
+  Future<void> acceptInvite(int invitationId) async {
     final storage = const FlutterSecureStorage();
     final String? jwtToken = await storage.read(key: 'jwt');
     final response = await http.post(
@@ -57,18 +57,19 @@ class _PendingInvitesPageState extends State<PendingInvitesPage> {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: {
-        'competitionId': competitionId,
+        'invitationId': invitationId.toString(),
       },
     );
 
     if (response.statusCode == 200) {
       setState(() {
-        invites = invites.map((invite) {
-          if (invite['competitionId'] == competitionId) {
-            invite['status'] = true;
-          }
-          return invite;
-        }).toList();
+        invites.removeWhere((invite) => invite['id'] == invitationId);
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Accepted Challenge with id: $invitationId')),
+      );
+      setState(() {
+        invites.removeWhere((invite) => invite['id'] == invitationId);
       });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
