@@ -1,5 +1,4 @@
 import 'package:fiske_fitness_app/components/my_button.dart';
-import 'package:fiske_fitness_app/pages/home_page.dart';
 import "package:flutter/material.dart";
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -18,6 +17,8 @@ class _LocationPageState extends State<LocationPage> {
   bool _isTracking = false;
   double _totalDistance = 0.0;
   bool _hasStartedTracking = false; // New state variable
+  DateTime? _startTime; // Tracks the start time
+  double _currentPace = 0.0; // Stores the calculated pace (in minutes per km)
 
   @override
   void initState() {
@@ -82,6 +83,7 @@ class _LocationPageState extends State<LocationPage> {
       setState(() {
         _isTracking = true;
         _hasStartedTracking = true; // Set this to true when tracking starts
+        _startTime = DateTime.now(); // Store the start time
       });
 
       LocationSettings locationSettings = LocationSettings(
@@ -107,6 +109,9 @@ class _LocationPageState extends State<LocationPage> {
             }
 
             _routePoints.add(LatLng(position.latitude, position.longitude));
+
+            // Calculate and update pace
+            _calculatePace();
           });
 
           _updateMap();
@@ -124,6 +129,19 @@ class _LocationPageState extends State<LocationPage> {
     if (mounted) {
       setState(() {
         _isTracking = false; // Update the local variable with setState
+      });
+    }
+  }
+
+  void _calculatePace() {
+    if (_totalDistance > 0 && _startTime != null) {
+      final elapsedTime = DateTime.now().difference(_startTime!);
+      final totalMinutes = elapsedTime.inSeconds / 60.0;
+      final distanceInKilometers = _totalDistance / 1000.0;
+
+      // Pace: Minutes per kilometer
+      setState(() {
+        _currentPace = totalMinutes / distanceInKilometers;
       });
     }
   }
@@ -220,6 +238,12 @@ class _LocationPageState extends State<LocationPage> {
                   'Distance: ${_totalDistance.toStringAsFixed(2)} meters',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
+                SizedBox(height: 10),
+                if (_totalDistance > 0)
+                  Text(
+                    'Pace: ${_currentPace.toStringAsFixed(2)} min/km',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
                 SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,

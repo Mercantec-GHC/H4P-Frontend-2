@@ -40,7 +40,7 @@ class _ChallengePageState extends State<ChallengePage> {
           challengesJson.map((item) => Challenge.fromJson(item)).toList();
 
       // Example sorting by id
-      challenges.sort((a, b) => a.id.compareTo(b.id));
+      challenges.sort((a, b) => b.id.compareTo(a.id));
 
       return challenges;
     } else {

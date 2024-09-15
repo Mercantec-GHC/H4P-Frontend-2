@@ -3,6 +3,8 @@ import "package:flutter/material.dart";
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import "home_page.dart";
+import "my_challenges_page.dart";
 
 class PendingInvitesPage extends StatefulWidget {
   const PendingInvitesPage({super.key});
@@ -21,6 +23,11 @@ class _PendingInvitesPageState extends State<PendingInvitesPage> {
     fetchInvites();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   Future<void> fetchInvites() async {
     final storage = const FlutterSecureStorage();
     final String? jwtToken = await storage.read(key: 'jwt');
@@ -33,7 +40,6 @@ class _PendingInvitesPageState extends State<PendingInvitesPage> {
 
     if (response.statusCode == 200) {
       final decodedResponse = jsonDecode(response.body);
-
       setState(() {
         invites = decodedResponse['data'];
         isLoading = false;
@@ -62,12 +68,10 @@ class _PendingInvitesPageState extends State<PendingInvitesPage> {
     );
 
     if (response.statusCode == 200) {
-      setState(() {
-        invites.removeWhere((invite) => invite['id'] == invitationId);
-      });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Accepted Challenge with id: $invitationId')),
       );
+
       setState(() {
         invites.removeWhere((invite) => invite['id'] == invitationId);
       });
