@@ -21,6 +21,15 @@ class _ChallengePageState extends State<ChallengePage> {
     _challengesFuture = fetchChallenges();
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    setState(() {
+      _challengesFuture =
+          fetchChallenges(); // Re-fetch challenges when returning to the page
+    });
+  }
+
   Future<List<Challenge>> fetchChallenges() async {
     final storage = const FlutterSecureStorage();
     final String? jwtToken = await storage.read(key: 'jwt');

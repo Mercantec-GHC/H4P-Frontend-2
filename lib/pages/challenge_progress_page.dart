@@ -12,12 +12,14 @@ class ChallengeProgressPage extends StatelessWidget {
   Widget build(BuildContext context) {
     // Dummy data for members' progress (replace with actual API data)
     final List<ChallengeMemberProgress> memberProgress = [
-      ChallengeMemberProgress(username: 'User1', distanceCompleted: 30.0),
-      ChallengeMemberProgress(username: 'User2', distanceCompleted: 15.5),
+      ChallengeMemberProgress(username: 'User1', distanceCompleted: 22.0),
+      ChallengeMemberProgress(username: 'User2', distanceCompleted: 22.0),
     ];
 
     return Scaffold(
+      backgroundColor: Color(0xFF6cbabc),
       appBar: AppBar(
+        backgroundColor: const Color(0xFFcacdce),
         title: Text('${challenge.title} Progress'),
       ),
       body: Padding(

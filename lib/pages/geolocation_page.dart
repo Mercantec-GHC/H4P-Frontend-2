@@ -70,8 +70,7 @@ class _LocationPageState extends State<LocationPage> {
     final url = Uri.parse(
         'https://fiskeprojekt-gruppe2.vercel.app/api/competitions/progress');
     final data = {
-      'progress':
-          _totalDistance, // Only sending the total distance as "progress"
+      'progress': _totalDistance.toString(),
     };
 
     try {
@@ -157,9 +156,8 @@ class _LocationPageState extends State<LocationPage> {
     // Cancel the position stream subscription
     await _positionStreamSubscription?.cancel();
     _positionStreamSubscription = null;
-    if (_hasStartedTracking) {
-      await _sendTrackingData(); // Send progress (distance) when stopping tracking
-    }
+
+    await _sendTrackingData(); // Send progress (distance) when stopping tracking
 
     // Use a check to ensure the widget is still mounted before calling setState
     if (mounted) {
