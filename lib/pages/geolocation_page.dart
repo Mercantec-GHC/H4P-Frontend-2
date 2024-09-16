@@ -3,6 +3,9 @@ import "package:flutter/material.dart";
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:async';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LocationPage extends StatefulWidget {
   @override
@@ -58,6 +61,36 @@ class _LocationPageState extends State<LocationPage> {
           _routePoints.add(newPoint);
         }
       });
+    }
+  }
+
+  Future<void> _sendTrackingData() async {
+    final storage = const FlutterSecureStorage();
+    final String? jwtToken = await storage.read(key: 'jwt');
+    final url = Uri.parse(
+        'https://fiskeprojekt-gruppe2.vercel.app/api/competitions/progress');
+    final data = {
+      'progress':
+          _totalDistance, // Only sending the total distance as "progress"
+    };
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          'Authorization': 'Bearer $jwtToken',
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: data,
+      );
+
+      if (response.statusCode == 200) {
+        print('Progress sent successfully.');
+      } else {
+        print('Failed to send progress: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error sending progress: $e');
     }
   }
 
@@ -124,6 +157,9 @@ class _LocationPageState extends State<LocationPage> {
     // Cancel the position stream subscription
     await _positionStreamSubscription?.cancel();
     _positionStreamSubscription = null;
+    if (_hasStartedTracking) {
+      await _sendTrackingData(); // Send progress (distance) when stopping tracking
+    }
 
     // Use a check to ensure the widget is still mounted before calling setState
     if (mounted) {
