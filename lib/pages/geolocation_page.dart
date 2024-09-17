@@ -14,21 +14,14 @@ class LocationPage extends StatefulWidget {
 class _LocationPageState extends State<LocationPage> {
   List<LatLng> _routePoints = [];
   Completer<GoogleMapController> _mapController = Completer();
-  bool _isMapControllerCompleted = false; // Flag for Completer
+  bool _isMapControllerCompleted = false;
   StreamSubscription<Position>? _positionStreamSubscription;
   bool _isTracking = false;
   double _totalDistance = 0.0;
-  bool _hasStartedTracking = false; // New state variable
-  bool _hasStoppedTracking = false; // New state variable
-  DateTime? _startTime; // Tracks the start time
-  double _currentPace = 0.0; // Stores the calculated pace (in minutes per km)
-
-/*
-  @override
-  void initState() {
-    super.initState();
-  }
-*/
+  bool _hasStartedTracking = false;
+  bool _hasStoppedTracking = false;
+  DateTime? _startTime;
+  double _currentPace = 0.0;
 
   @override
   void dispose() {
@@ -38,32 +31,6 @@ class _LocationPageState extends State<LocationPage> {
       _isMapControllerCompleted = true;
     }
     super.dispose();
-  }
-
-  void _onNewPosition(Position position) {
-    if (_routePoints.isEmpty || _isPositionValid(position)) {
-      setState(() {
-        LatLng newPoint = LatLng(position.latitude, position.longitude);
-
-        if (_routePoints.isNotEmpty) {
-          LatLng lastPoint = _routePoints.last;
-          double distance = Geolocator.distanceBetween(
-            lastPoint.latitude,
-            lastPoint.longitude,
-            position.latitude,
-            position.longitude,
-          );
-
-          if (distance > 5) {
-            // Only add points if the distance is more than 5 meters
-            _totalDistance += distance;
-            _routePoints.add(newPoint);
-          }
-        } else {
-          _routePoints.add(newPoint);
-        }
-      });
-    }
   }
 
   Future<void> _sendTrackingData() async {
@@ -95,20 +62,6 @@ class _LocationPageState extends State<LocationPage> {
     }
   }
 
-  bool _isPositionValid(Position newPos) {
-    if (_routePoints.isEmpty) return true;
-
-    LatLng lastPoint = _routePoints.last;
-    double distance = Geolocator.distanceBetween(
-      lastPoint.latitude,
-      lastPoint.longitude,
-      newPos.latitude,
-      newPos.longitude,
-    );
-
-    return distance > 5 && distance < 100; // Ignore erratic points
-  }
-
   void _startTracking() async {
     if (_isTracking) return;
 
@@ -116,9 +69,9 @@ class _LocationPageState extends State<LocationPage> {
     if (hasPermission && mounted) {
       setState(() {
         _isTracking = true;
-        _hasStartedTracking = true; // Set this to true when tracking starts
-        _hasStoppedTracking = false; // Reset the stop tracking flag
-        _startTime = DateTime.now(); // Store the start time
+        _hasStartedTracking = true;
+        _hasStoppedTracking = false;
+        _startTime = DateTime.now();
       });
 
       LocationSettings locationSettings = LocationSettings(
@@ -145,7 +98,6 @@ class _LocationPageState extends State<LocationPage> {
 
             _routePoints.add(LatLng(position.latitude, position.longitude));
 
-            // Calculate and update pace
             _calculatePace();
           });
 
