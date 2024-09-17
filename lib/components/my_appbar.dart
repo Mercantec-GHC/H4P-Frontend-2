@@ -1,5 +1,3 @@
-// Make Appbar into component
-
 import 'package:flutter/material.dart';
 import "../pages/edit_profile_page.dart";
 import "../pages/home_page.dart";

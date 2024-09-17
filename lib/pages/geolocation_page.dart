@@ -4,7 +4,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LocationPage extends StatefulWidget {
@@ -20,13 +19,16 @@ class _LocationPageState extends State<LocationPage> {
   bool _isTracking = false;
   double _totalDistance = 0.0;
   bool _hasStartedTracking = false; // New state variable
+  bool _hasStoppedTracking = false; // New state variable
   DateTime? _startTime; // Tracks the start time
   double _currentPace = 0.0; // Stores the calculated pace (in minutes per km)
 
+/*
   @override
   void initState() {
     super.initState();
   }
+*/
 
   @override
   void dispose() {
@@ -115,6 +117,7 @@ class _LocationPageState extends State<LocationPage> {
       setState(() {
         _isTracking = true;
         _hasStartedTracking = true; // Set this to true when tracking starts
+        _hasStoppedTracking = false; // Reset the stop tracking flag
         _startTime = DateTime.now(); // Store the start time
       });
 
@@ -164,6 +167,7 @@ class _LocationPageState extends State<LocationPage> {
     if (mounted) {
       setState(() {
         _isTracking = false;
+        _hasStoppedTracking = true; // Set this to true when tracking stops
       });
     }
   }
@@ -280,6 +284,15 @@ class _LocationPageState extends State<LocationPage> {
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 SizedBox(height: 10),
+                if (_hasStoppedTracking) // Show only if tracking has stopped
+                  Text(
+                    'Finished Tracking',
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red),
+                  ),
+                SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -288,13 +301,12 @@ class _LocationPageState extends State<LocationPage> {
                         onTap: _startTracking,
                         text: 'Start Tracking',
                       ),
-                    if (_hasStartedTracking) // Show only if tracking has started
-                      ...[
+                    if (_hasStartedTracking &&
+                        !_hasStoppedTracking) // Show only if tracking has started and not stopped
                       MyButton(
                         onTap: _isTracking ? _stopTracking : null,
                         text: 'Stop Tracking',
                       ),
-                    ],
                   ],
                 ),
               ],

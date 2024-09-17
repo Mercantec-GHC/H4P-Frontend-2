@@ -104,7 +104,7 @@ class _CreateChallengePageState extends State<CreateChallengePage> {
                 ),
                 const SizedBox(height: 50),
                 const Text(
-                  "Opret Challenge",
+                  "Create A New Challenge",
                   style: TextStyle(
                     color: Color(0xFF333333),
                     fontSize: 14,
@@ -125,7 +125,7 @@ class _CreateChallengePageState extends State<CreateChallengePage> {
                 const SizedBox(height: 25),
                 MyTextField(
                   controller: _challengeTargetDistanceController,
-                  hintText: "Distance",
+                  hintText: "Distance (M)",
                   obscureText: false,
                 ),
                 const SizedBox(height: 25),

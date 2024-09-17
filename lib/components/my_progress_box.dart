@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 import "../components/my_challenge_box.dart";
-import "../components/my_button.dart";
-import "../components/my_textfield.dart";
-import 'package:http/http.dart' as http;
-import "package:flutter_secure_storage/flutter_secure_storage.dart";
 
 class ChallengeMemberProgressBox extends StatelessWidget {
   final ChallengeMemberProgress memberProgress;
@@ -21,6 +17,7 @@ class ChallengeMemberProgressBox extends StatelessWidget {
         memberProgress.distanceCompleted / targetDistance;
 
     return Card(
+      color: Color(0xFFcacdce),
       elevation: 3.0,
       margin: EdgeInsets.symmetric(vertical: 5.0),
       child: Padding(
@@ -37,7 +34,7 @@ class ChallengeMemberProgressBox extends StatelessWidget {
             ),
             SizedBox(height: 10.0),
             Text(
-              'Distance Completed: ${memberProgress.distanceCompleted} km / $targetDistance km',
+              'Distance Completed: ${memberProgress.distanceCompleted.toStringAsFixed(1)} m / $targetDistance m',
               style: TextStyle(fontSize: 14.0),
             ),
             SizedBox(height: 8.0),
@@ -51,7 +48,7 @@ class ChallengeMemberProgressBox extends StatelessWidget {
             ),
             SizedBox(height: 5.0),
             Text(
-              '${(progressPercentage * 100).toStringAsFixed(1)}% completed',
+              '${(progressPercentage * 100).toStringAsFixed(1)}% Completed',
               style: TextStyle(fontSize: 14.0),
             ),
           ],

@@ -13,7 +13,10 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        textTheme: GoogleFonts.lexendTextTheme(),
+        textTheme: GoogleFonts.lexendTextTheme().apply(
+          bodyColor: Color(0xFF333333),
+          displayColor: Color(0xFF333333),
+        ),
       ),
       debugShowCheckedModeBanner: false,
       home: LoginPage(),
