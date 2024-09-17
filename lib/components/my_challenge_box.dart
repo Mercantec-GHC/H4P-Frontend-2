@@ -2,6 +2,7 @@ import "package:fiske_fitness_app/pages/challenge_progress_page.dart";
 import 'package:flutter/material.dart';
 import "../pages/invite_user_page.dart";
 import "../components/my_button.dart";
+import "../components/my_progress_box.dart";
 
 class Challenge {
   final String title;
@@ -22,6 +23,24 @@ class Challenge {
       description: json['description'],
       targetDistance: (json['targetDistance'] as num).toDouble(),
       id: json['id'],
+    );
+  }
+}
+
+class ChallengeMemberProgress {
+  final String username;
+  final double distanceCompleted;
+
+  ChallengeMemberProgress({
+    required this.username,
+    required this.distanceCompleted,
+  });
+
+  // Factory method to create a ChallengeMemberProgress object from JSON
+  factory ChallengeMemberProgress.fromJson(Map<String, dynamic> json) {
+    return ChallengeMemberProgress(
+      username: json['id'].toString(), // Use id as username for now
+      distanceCompleted: (json['progress'] as num).toDouble(),
     );
   }
 }

@@ -153,16 +153,17 @@ class _LocationPageState extends State<LocationPage> {
   }
 
   void _stopTracking() async {
+    if (_positionStreamSubscription == null) return; // Prevent multiple calls
+
     // Cancel the position stream subscription
     await _positionStreamSubscription?.cancel();
     _positionStreamSubscription = null;
 
     await _sendTrackingData(); // Send progress (distance) when stopping tracking
 
-    // Use a check to ensure the widget is still mounted before calling setState
     if (mounted) {
       setState(() {
-        _isTracking = false; // Update the local variable with setState
+        _isTracking = false;
       });
     }
   }
