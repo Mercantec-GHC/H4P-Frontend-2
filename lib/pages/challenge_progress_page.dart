@@ -54,7 +54,7 @@ class ChallengeProgressPage extends StatelessWidget {
             : (member['progress'] as num).toDouble();
 
         return ChallengeMemberProgress(
-          username: member['id'].toString(), // Use id as username for now
+          username: member['username'].toString(), // Use id as username for now
           distanceCompleted: progress,
         );
       }).toList();
